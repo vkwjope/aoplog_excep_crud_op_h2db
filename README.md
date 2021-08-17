@@ -4,8 +4,11 @@
 2. Custom exception handling using Controller Advice
 3. CRUD operations (includes patch operation)
 4. H2 DB for persistence
+5. Swagger UI
 
 **Endpoints**
+
+Swagger - http://localhost:8080/swagger-ui.html
 
 POST - http://localhost:8991/employees
 
