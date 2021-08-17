@@ -56,7 +56,7 @@ public class EmployeeController {
 
 	@PatchMapping("/employee/{emp_id}")
 	public Employee patchEmployee(@PathVariable("emp_id") Long empId, @RequestBody Map<Object, Object> update) {
-		Employee emp = employeeService.patchEmployee(empId,update);
+		Employee emp = employeeService.patchEmployee(empId, update);
 		return emp;
 	}
 
