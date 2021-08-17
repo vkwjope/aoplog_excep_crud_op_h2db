@@ -25,51 +25,52 @@ public class AopLogger {
 	@Before("execution(* com.example.employeemanagementservice.*.*.*(..))")
 	public void before(JoinPoint joinPoint) throws Throwable {
 		logger = LoggerFactory.getLogger(joinPoint.getSignature().getDeclaringType());
-		logger.debug(joinPoint.getSignature().getName());
-		logger.debug(Arrays.toString(joinPoint.getArgs()));
+		logger.debug("Method name:" + joinPoint.getSignature().getName());
+		logger.debug("Arguments :" + Arrays.toString(joinPoint.getArgs()));
 	}
 
 	@AfterThrowing(pointcut = "execution(* com.example.employeemanagementservice.*.*.*(..))", throwing = "exception")
 	public void afterThrowing(JoinPoint joinPoint, Throwable exception) {
 		logger = LoggerFactory.getLogger(joinPoint.getSignature().getDeclaringType());
-		logger.error(joinPoint.getSignature().getName(), exception.getMessage());
+		logger.error("Method name:" + joinPoint.getSignature().getName(), exception.getMessage());
 		logger.error("Exception :", exception);
 	}
 
 	@AfterReturning(pointcut = "execution(* com.example.employeemanagementservice.*.*.*(..))", returning = "result")
 	public void afterReturning(JoinPoint joinPoint, Object result) {
 		logger = LoggerFactory.getLogger(joinPoint.getSignature().getDeclaringType());
-		logger.debug(joinPoint.getSignature().getName() + "Returned value" + result);
+		logger.debug("Method name:" + joinPoint.getSignature().getName() );
+		logger.debug("Returned value " + result);
 	}
 
 	@After("execution(* com.example.employeemanagementservice.*.*.*(..))")
 	public void after(JoinPoint joinPoint) {
 		logger = LoggerFactory.getLogger(joinPoint.getSignature().getDeclaringType());
-		logger.debug(joinPoint.getSignature().getName());
-		logger.debug(Arrays.toString(joinPoint.getArgs()));
+		logger.debug("Method name:" + joinPoint.getSignature().getName());
+		logger.debug("Arguments :" + Arrays.toString(joinPoint.getArgs()));
 	}
-	
-	//AOP expression for which methods shall be intercepted
-    @Around("execution(* com.example.employeemanagementservice.*.*.*(..))")
-    public Object profileAllMethods(ProceedingJoinPoint proceedingJoinPoint) throws Throwable 
-    {
-        MethodSignature methodSignature = (MethodSignature) proceedingJoinPoint.getSignature();
-         
-        //Get intercepted method details
-        String className = methodSignature.getDeclaringType().getSimpleName();
-        String methodName = methodSignature.getName();
-         
-        final StopWatch stopWatch = new StopWatch();
-         
-        //Measure method execution time
-        stopWatch.start();
-        Object result = proceedingJoinPoint.proceed();
-        stopWatch.stop();
- 
-        //Log method execution time
-        logger.debug("Execution time of " + className + "." + methodName + " :: " + stopWatch.getTotalTimeMillis() + " ms");
- 
-        return result;
-    }
+
+	// AOP expression for which methods shall be intercepted
+	@Around("execution(* com.example.employeemanagementservice.*.*.*(..))")
+	public Object profileAllMethods(ProceedingJoinPoint proceedingJoinPoint) throws Throwable {
+		MethodSignature methodSignature = (MethodSignature) proceedingJoinPoint.getSignature();
+
+		// Get intercepted method details
+		String className = methodSignature.getDeclaringType().getSimpleName();
+		String methodName = methodSignature.getName();
+
+		final StopWatch stopWatch = new StopWatch();
+
+		// Measure method execution time
+		stopWatch.start();
+		Object result = proceedingJoinPoint.proceed();
+		stopWatch.stop();
+
+		// Log method execution time
+		logger.debug(
+				"Execution time of " + className + "." + methodName + " :: " + stopWatch.getTotalTimeMillis() + " ms");
+
+		return result;
+	}
 
 }

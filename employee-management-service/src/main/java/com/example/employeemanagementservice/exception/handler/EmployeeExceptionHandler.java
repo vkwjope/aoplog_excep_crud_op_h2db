@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
 
+import com.example.employeemanagementservice.exceptions.EmployeeAlreadyExistsException;
 import com.example.employeemanagementservice.exceptions.EmployeeNotFoundException;
 import com.example.employeemanagementservice.exceptions.ExceptionResponse;
 
@@ -22,6 +23,15 @@ public class EmployeeExceptionHandler extends ResponseEntityExceptionHandler {
 		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), httpStatus.value(),
 				httpStatus.getReasonPhrase(), ex.getMessage(), request.getDescription(false));
 		return new ResponseEntity<>(exceptionResponse, httpStatus);
+	}
+
+	@ExceptionHandler(EmployeeAlreadyExistsException.class)
+	public ResponseEntity<Object> handleEmployeeAlreadyExistsException(Exception ex, WebRequest req) {
+		HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
+		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), httpStatus.value(),
+				httpStatus.getReasonPhrase(), ex.getMessage(), req.getDescription(false));
+		return new ResponseEntity<>(exceptionResponse, httpStatus);
+
 	}
 
 }

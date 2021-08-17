@@ -6,6 +6,7 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.example.employeemanagementservice.exceptions.EmployeeAlreadyExistsException;
 import com.example.employeemanagementservice.exceptions.EmployeeNotFoundException;
 import com.example.employeemanagementservice.model.Employee;
 import com.example.employeemanagementservice.repo.EmployeeRepo;
@@ -39,8 +40,13 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public Employee addEmployee(Employee employee) {
-		Employee emp = employeeRepo.save(employee);
-		return emp;
+		Optional<Employee> empById = employeeRepo.findById(employee.getId());
+		if (empById.isEmpty()) {
+			Employee emp = employeeRepo.save(employee);
+			return emp;
+		} else {
+			throw new EmployeeAlreadyExistsException("Employee exists with Employee id");
+		}
 	}
 
 }
