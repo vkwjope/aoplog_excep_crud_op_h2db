@@ -10,15 +10,15 @@
 
 Swagger - http://localhost:8080/swagger-ui.html
 
-POST - http://localhost:8991/employees
+POST - http://localhost:8080/employees
 
-GET - http://localhost:8991/employees/
+GET - http://localhost:8080/employees/
 
-GET - http://localhost:8991/employees/employee/2
+GET - http://localhost:8080/employees/employee/2
 
-DELETE - http://localhost:8991/employees/employee/6
+DELETE - http://localhost:8080/employees/employee/6
 
-PUT - http://localhost:8991/employees
+PUT - http://localhost:8080/employees
 
-PATCH - http://localhost:8991/employees/employee/19
+PATCH - http://localhost:8080/employees/employee/19
 
