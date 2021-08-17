@@ -1,6 +1,9 @@
 package com.example.employeemanagementservice.model;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 
@@ -18,6 +21,8 @@ import lombok.ToString;
 public class Employee {
 
 	@Id
+	@GeneratedValue(strategy = GenerationType.SEQUENCE)
+	@Column(name = "emp_id", nullable = false)
 	private Long id;
 
 	private String lastName;

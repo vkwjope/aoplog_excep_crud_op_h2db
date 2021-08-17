@@ -1,6 +1,7 @@
 package com.example.employeemanagementservice.service;
 
 import java.util.List;
+import java.util.Map;
 
 import org.springframework.stereotype.Service;
 
@@ -15,4 +16,9 @@ public interface EmployeeService {
 
 	public Employee addEmployee(Employee employee);
 
+	public String deleteEmployee(Long id);
+
+	public Employee updateEmployee(Employee employee);
+
+	public Employee patchEmployee(Long empId, Map<Object, Object> update);
 }

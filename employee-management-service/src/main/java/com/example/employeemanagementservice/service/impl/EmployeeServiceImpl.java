@@ -1,10 +1,13 @@
 package com.example.employeemanagementservice.service.impl;
 
+import java.lang.reflect.Field;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.util.ReflectionUtils;
 
 import com.example.employeemanagementservice.exceptions.EmployeeAlreadyExistsException;
 import com.example.employeemanagementservice.exceptions.EmployeeNotFoundException;
@@ -40,12 +43,48 @@ public class EmployeeServiceImpl implements EmployeeService {
 
 	@Override
 	public Employee addEmployee(Employee employee) {
-		Optional<Employee> empById = employeeRepo.findById(employee.getId());
-		if (empById.isEmpty()) {
-			Employee emp = employeeRepo.save(employee);
-			return emp;
+		if (employee.getId() == null) {
+			employee.setId(0l);
+		}
+		Employee emp = employeeRepo.save(employee);
+		return emp;
+	}
+
+	@Override
+	public String deleteEmployee(Long id) {
+		Optional<Employee> emp = employeeRepo.findById(id);
+		if (emp.isEmpty()) {
+			throw new EmployeeNotFoundException("Delete Employee failed , employee is not present");
 		} else {
-			throw new EmployeeAlreadyExistsException("Employee exists with Employee id");
+			employeeRepo.deleteById(id);
+		}
+		return "Deleted employee with id:" + id;
+	}
+
+	@Override
+	public Employee updateEmployee(Employee employee) {
+		Optional<Employee> emp = employeeRepo.findById(employee.getId());
+		if (emp.isEmpty()) {
+			throw new EmployeeNotFoundException("Update Employee failed , employee is not present");
+		} else {
+			Employee empl = employeeRepo.save(employee);
+			return empl;
+		}
+	}
+
+	@Override
+	public Employee patchEmployee(Long empId, Map<Object, Object> updatedValues) {
+		Optional<Employee> emp = employeeRepo.findById(empId);
+		if (emp.isPresent()) {
+			updatedValues.forEach((key, value) -> {
+				Field field = ReflectionUtils.findField(Employee.class, (String) key);
+				field.setAccessible(true);
+				ReflectionUtils.setField(field, emp.get(), value);
+			});
+			Employee empl = employeeRepo.save(emp.get());
+			return empl;
+		} else {
+			throw new EmployeeNotFoundException("Update failed, Employee not found");
 		}
 	}
 

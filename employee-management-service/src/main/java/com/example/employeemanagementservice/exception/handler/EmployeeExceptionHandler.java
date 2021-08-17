@@ -20,16 +20,19 @@ public class EmployeeExceptionHandler extends ResponseEntityExceptionHandler {
 	public final ResponseEntity<java.lang.Object> handleEmployeeNotFoundException(java.lang.Exception ex,
 			WebRequest request) {
 		HttpStatus httpStatus = HttpStatus.NOT_FOUND;
-		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), httpStatus.value(),
-				httpStatus.getReasonPhrase(), ex.getMessage(), request.getDescription(false));
+		ExceptionResponse exceptionResponse = ExceptionResponse.builder().timestamp(new Date())
+				.status(httpStatus.value()).error(httpStatus.getReasonPhrase()).message(ex.getMessage())
+				.details(request.getDescription(false)).build();
 		return new ResponseEntity<>(exceptionResponse, httpStatus);
 	}
 
 	@ExceptionHandler(EmployeeAlreadyExistsException.class)
 	public ResponseEntity<Object> handleEmployeeAlreadyExistsException(Exception ex, WebRequest req) {
 		HttpStatus httpStatus = HttpStatus.BAD_REQUEST;
-		ExceptionResponse exceptionResponse = new ExceptionResponse(new Date(), httpStatus.value(),
-				httpStatus.getReasonPhrase(), ex.getMessage(), req.getDescription(false));
+		ExceptionResponse exceptionResponse = ExceptionResponse.builder().timestamp(new Date())
+				.status(httpStatus.value()).error(httpStatus.getReasonPhrase()).message(ex.getMessage())
+				.details(req.getDescription(false)).build();
+
 		return new ResponseEntity<>(exceptionResponse, httpStatus);
 
 	}
